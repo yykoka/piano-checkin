@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 小小音乐家成长记</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #ffd93d 100%);
+            background-size: 400% 400%;
+            animation: rainbowBg 15s ease infinite;
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        
+        @keyframes rainbowBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* 标题动画 */
+        .header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 15px;
+            animation: titleBounce 2s ease infinite;
+        }
+        
+        @keyframes titleBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #fff, #ffd93d, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* 等级卡片 */
+        .level-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #ffd93d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .level-name {
+            font-size: 18px;
+            color: #764ba2;
+            font-weight: bold;
+        }
+        
+        .level-num {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            animation: glow 2s infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #ffd93d; }
+            50% { box-shadow: 0 0 20px #ffd93d; }
+        }
+        
+        .exp-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 15px;
+            overflow: hidden;
+        }
+        
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        /* 任务卡片 */
+        .task-card {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #ff9a56;
+        }
+        
+        .task-card h3 {
+            color: #e85d04;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .task-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ff9a56;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .task-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .chip {
+            background: #fff;
+            color: #e85d04;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 2px solid #ff9a56;
+            transition: all 0.3s;
+        }
+        
+        .chip:hover {
+            background: #ff9a56;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        /* 计时器 */
+        .timer-card {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #4ecdc4;
+            text-align: center;
+        }
+        
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2d3436;
+            font-family: monospace;
+            margin-bottom: 15px;
+        }
+        
+        .timer-display.running {
+            animation: pulse 1s infinite;
+            color: #00b894;
+        }
+        
+        .timer-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 3px solid #fff;
+            transition: transform 0.2s;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: #fff;
+        }
+        
+        .btn-finish {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #fff;
+        }
+        
+        /* 徽章 */
+        .badges-card {
+            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #ff6b6b;
+        }
+        
+        .badges-card h3 {
+            color: #ee5a6f;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .badges-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            opacity: 0.3;
+            transition: all 0.5s;
+            border: 3px solid #ccc;
+        }
+        
+        .badge.unlocked {
+            opacity: 1;
+            border-color: #ffd93d;
+            box-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+            animation: badgePop 0.6s ease;
+        }
+        
+        @keyframes badgePop {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        /* 庆祝弹窗 */
+        .celebrate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .celebrate.show {
+            display: flex;
+        }
+        
+        .celebrate-content {
+            text-align: center;
+            color: #fff;
+        }
+        
+        .celebrate-emoji {
+            font-size: 80px;
+            animation: dance 1s infinite;
+        }
+        
+        @keyframes dance {
+            0%, 100% { transform: rotate(-10deg) translateY(0); }
+            50% { transform: rotate(10deg) translateY(-20px); }
+        }
+        
+        .celebrate h2 {
+            font-size: 28px;
+            color: #ffd93d;
+            margin: 20px 0;
+        }
+        
+        .celebrate button {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 3px solid #fff;
+        }
+        
+        /* 日历 */
+        .calendar-card {
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #9b59b6;
+        }
+        
+        .calendar-card h3 {
+            color: #9b59b6;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        
+        .cal-header {
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+            padding: 5px;
+        }
+        
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #e8e8e8;
+            color: #666;
+        }
+        
+        .cal-day.checked {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .cal-day.today {
+            border: 2px solid #9b59b6;
+        }
+        
+        /* 同步按钮 */
+        .sync-card {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #fff;
+            text-align: center;
+        }
+        
+        .sync-btn {
+            background: #fff;
+            color: #0984e3;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .sync-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 导出弹窗 */
+        .export-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .export-modal.show {
+            display: flex;
+        }
+        
+        .export-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        .export-content h3 {
+            color: #0984e3;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .export-textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #74b9ff;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 12px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        
+        .export-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .export-btns button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: #fff;
+        }
+        
+        .btn-close {
+            background: #e0e0e0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌈 小小音乐家成长记</h1>
+        </div>
+        
+        <div class="level-card">
+            <div class="level-info">
+                <span class="level-name" id="levelName">🎵 音乐小新手</span>
+                <span class="level-num" id="levelNum">Lv.1</span>
+            </div>
+            <div class="exp-bar">
+                <div class="exp-fill" id="expFill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div class="task-card">
+            <h3>🎯 今天的练琴任务</h3>
+            <input type="text" class="task-input" id="taskInput" placeholder="想练什么？自己输入或点击下方">
+            <div class="task-chips">
+                <span class="chip" onclick="setTask('练习音阶')">🎹 音阶</span>
+                <span class="chip" onclick="setTask('练习曲子')">🎵 曲子</span>
+                <span class="chip" onclick="setTask('左手练习')">👋 左手</span>
+                <span class="chip" onclick="setTask('双手配合')">🙌 双手</span>
+            </div>
+        </div>
+        
+        <div class="timer-card">
+            <div class="timer-display" id="timer">00:00</div>
+            <div class="timer-btns">
+                <button class="btn btn-start" id="startBtn" onclick="startTimer()">▶️ 开始</button>
+                <button class="btn btn-finish" onclick="finish()">✅ 完成</button>
+            </div>
+        </div>
+        
+        <div class="badges-card">
+            <h3>🏆 我的成就徽章</h3>
+            <div class="badges-grid">
+                <div class="badge" id="b1">🎵</div>
+                <div class="badge" id="b2">⏱️</div>
+                <div class="badge" id="b3">🌟</div>
+                <div class="badge" id="b4">🔥</div>
+                <div class="badge" id="b5">💎</div>
+            </div>
+        </div>
+        
+        <!-- 日历 -->
+        <div class="calendar-card">
+            <h3>📅 本月练习日历</h3>
+            <div class="calendar-grid" id="calendar">
+                <div class="cal-header">日</div>
+                <div class="cal-header">一</div>
+                <div class="cal-header">二</div>
+                <div class="cal-header">三</div>
+                <div class="cal-header">四</div>
+                <div class="cal-header">五</div>
+                <div class="cal-header">六</div>
+            </div>
+        </div>
+
+        <!-- 同步按钮 -->
+        <div class="sync-card">
+            <button class="sync-btn" onclick="showExport()">☁️ 同步到飞书</button>
+        </div>
+    </div>
+    
+    <div class="celebrate" id="celebrate">
+        <div class="celebrate-content">
+            <div class="celebrate-emoji">🎉🎊🎉</div>
+            <h2 id="celebrateTitle">升级啦！</h2>
+            <p id="celebrateText">恭喜你升到2级！</p>
+            <button onclick="closeCelebrate()">继续加油 💪</button>
+        </div>
+    </div>
+    
+    <!-- 导出弹窗 -->
+    <div class="export-modal" id="exportModal">
+        <div class="export-content">
+            <h3>📋 复制到飞书表格</h3>
+            <textarea class="export-textarea" id="exportData" readonly></textarea>
+            <div class="export-btns">
+                <button class="btn-copy" onclick="copyData()">📋 复制</button>
+                <button class="btn-close" onclick="closeExport()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const levels = [
+            { level: 1, title: '🎵 音乐小新手', need: 50 },
+            { level: 2, title: '🎹 钢琴小达人', need: 100 },
+            { level: 3, title: '🌟 闪亮小明星', need: 200 },
+            { level: 4, title: '🎼 小小演奏家', need: 350 },
+            { level: 5, title: '💎 音乐宝石', need: 550 }
+        ];
+        
+        let level = parseInt(localStorage.getItem('level') || '1');
+        let exp = parseInt(localStorage.getItem('exp') || '0');
+        let seconds = 0;
+        let timer = null;
+        let unlocked = JSON.parse(localStorage.getItem('badges') || '[]');
+        
+        updateDisplay();
+        unlocked.forEach(id => document.getElementById('b' + id)?.classList.add('unlocked'));
+        
+        function setTask(task) {
+            document.getElementById('taskInput').value = task;
+        }
+        
+        function startTimer() {
+            if (!timer) {
+                document.getElementById('timer').classList.add('running');
+                document.getElementById('startBtn').textContent = '⏸️ 暂停';
+                timer = setInterval(() => {
+                    seconds++;
+                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                    const s = (seconds % 60).toString().padStart(2, '0');
+                    document.getElementById('timer').textContent = m + ':' + s;
+                }, 1000);
+            } else {
+                clearInterval(timer);
+                timer = null;
+                document.getElementById('timer').classList.remove('running');
+                document.getElementById('startBtn').textContent = '▶️ 继续';
+            }
+        }
+        
+        function finish() {
+            if (seconds < 60) {
+                alert('再练一会儿吧，至少练1分钟哦！');
+                return;
+            }
+            
+            clearInterval(timer);
+            timer = null;
+            
+            const mins = Math.floor(seconds / 60);
+            const gain = mins * 2;
+            exp += gain;
+            
+            // 解锁徽章
+            if (mins >= 10) unlockBadge(2);
+            if (mins >= 30) unlockBadge(3);
+            if (!unlocked.includes(1)) unlockBadge(1);
+            
+            // 检查升级
+            while (level < levels.length && exp >= levels[level - 1].need) {
+                level++;
+                localStorage.setItem('level', level);
+                showCelebrate('升级啦！', '恭喜你升到 ' + level + ' 级！');
+            }
+            
+            localStorage.setItem('exp', exp);
+            localStorage.setItem('badges', JSON.stringify(unlocked));
+            
+            // 记录今天练习
+            recordPractice();
+            renderCalendar();
+            
+            seconds = 0;
+            document.getElementById('timer').textContent = '00:00';
+            document.getElementById('timer').classList.remove('running');
+            document.getElementById('startBtn').textContent = '▶️ 开始';
+            
+            updateDisplay();
+            alert('🎉 太棒了！获得 ' + gain + ' 经验！');
+        }
+        
+        function unlockBadge(id) {
+            if (!unlocked.includes(id)) {
+                unlocked.push(id);
+                document.getElementById('b' + id).classList.add('unlocked');
+            }
+        }
+        
+        function updateDisplay() {
+            const data = levels[level - 1];
+            document.getElementById('levelName').textContent = data.title;
+            document.getElementById('levelNum').textContent = 'Lv.' + level;
+            
+            const nextNeed = levels[level]?.need || data.need;
+            const progress = Math.min((exp / nextNeed) * 100, 100);
+            document.getElementById('expFill').style.width = progress + '%';
+        }
+        
+        function showCelebrate(title, text) {
+            document.getElementById('celebrateTitle').textContent = title;
+            document.getElementById('celebrateText').textContent = text;
+            document.getElementById('celebrate').classList.add('show');
+        }
+        
+        function closeCelebrate() {
+            document.getElementById('celebrate').classList.remove('show');
+        }
+        
+        // 日历数据
+        let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords') || '[]');
+        
+        // 渲染日历
+        function renderCalendar() {
+            const calendar = document.getElementById('calendar');
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            // 获取月初是星期几
+            const firstDay = new Date(year, month, 1).getDay();
+            // 获取当月天数
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // 保留星期标题，添加日期
+            let html = `
+                <div class="cal-header">日</div>
+                <div class="cal-header">一</div>
+                <div class="cal-header">二</div>
+                <div class="cal-header">三</div>
+                <div class="cal-header">四</div>
+                <div class="cal-header">五</div>
+                <div class="cal-header">六</div>
+            `;
+            
+            // 空白填充
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div></div>';
+            }
+            
+            // 日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isChecked = practiceRecords.includes(dateStr);
+                const isToday = day === now.getDate();
+                
+                let className = 'cal-day';
+                if (isChecked) className += ' checked';
+                if (isToday) className += ' today';
+                
+                html += `<div class="${className}">${isChecked ? '✓' : day}</div>`;
+            }
+            
+            calendar.innerHTML = html;
+        }
+        
+        // 记录今天的练习
+        function recordPractice() {
+            const today = new Date().toISOString().split('T')[0];
+            if (!practiceRecords.includes(today)) {
+                practiceRecords.push(today);
+                localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+            }
+        }
+        
+        // 显示导出弹窗
+        function showExport() {
+            const today = new Date().toISOString().split('T')[0];
+            const data = `日期\t任务\t时长(分钟)\t获得经验\t等级
+${today}\t${document.getElementById('taskInput').value || '练琴'}\t${Math.floor(seconds / 60)}\t${Math.floor(seconds / 60) * 2}\tLv.${level}`;
+            
+            document.getElementById('exportData').value = data;
+            document.getElementById('exportModal').classList.add('show');
+        }
+        
+        // 复制数据
+        function copyData() {
+            const textarea = document.getElementById('exportData');
+            textarea.select();
+            document.execCommand('copy');
+            alert('📋 已复制！打开飞书表格粘贴即可');
+        }
+        
+        // 关闭导出
+        function closeExport() {
+            document.getElementById('exportModal').classList.remove('show');
+        }
+        
+        // 初始化日历
+        renderCalendar();
+    </script>
+</body>
+</html>
