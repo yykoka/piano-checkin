@@ -3,622 +3,739 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎹 练琴打卡 - 小小音乐家</title>
+    <title>🌈 小小音乐家成长记</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(180deg, #FFE5B4 0%, #FFB6C1 50%, #DDA0DD 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #ffd93d 100%);
+            background-size: 400% 400%;
+            animation: rainbowBg 15s ease infinite;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
+            padding: 10px;
+            overflow-x: hidden;
         }
         
+        @keyframes rainbowBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* 标题动画 */
         .header {
             text-align: center;
             color: #fff;
             margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: titleBounce 2s ease infinite;
+        }
+        
+        @keyframes titleBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         .header h1 {
-            font-size: 26px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #fff, #ffd93d, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        /* 积分板 */
-        .score-board {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 25px;
-            padding: 12px 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 8px 25px rgba(255, 165, 0, 0.4);
-            margin-bottom: 20px;
-            border: 3px solid #fff;
-        }
-        
-        .star {
-            font-size: 36px;
-            animation: twinkle 1.5s infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.3) rotate(10deg); }
-        }
-        
-        .score-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        
-        .score-label {
-            font-size: 14px;
-            color: #8B4513;
-            font-weight: bold;
-        }
-        
-        .score-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-        }
-        
-        /* 翻转卡片 */
-        .card-container {
-            perspective: 1000px;
-            width: 300px;
-            height: 400px;
-            margin-bottom: 20px;
-        }
-        
-        .card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            cursor: pointer;
-        }
-        
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-        
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            padding: 25px;
-            border: 5px solid #fff;
-        }
-        
-        /* 正面 */
-        .card-front {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
-            color: #fff;
-        }
-        
-        .piano-icon {
-            font-size: 100px;
+        /* 等级卡片 */
+        .level-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-radius: 20px;
+            padding: 15px;
             margin-bottom: 15px;
-            animation: bounce 1s infinite;
-            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.1));
+            border: 3px solid #ffd93d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
         }
         
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
         }
         
-        .card-front h2 {
-            font-size: 26px;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
         
-        .card-front p {
-            font-size: 15px;
-            opacity: 0.95;
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .level-name {
+            font-size: 18px;
+            color: #764ba2;
+            font-weight: bold;
+        }
+        
+        .level-num {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            animation: glow 2s infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #ffd93d; }
+            50% { box-shadow: 0 0 20px #ffd93d; }
+        }
+        
+        .exp-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 15px;
+            overflow: hidden;
+        }
+        
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        /* 任务卡片 */
+        .task-card {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #ff9a56;
+        }
+        
+        .task-card h3 {
+            color: #e85d04;
+            margin-bottom: 10px;
             text-align: center;
         }
         
-        .streak-box {
-            background: rgba(255,255,255,0.3);
-            padding: 10px 20px;
-            border-radius: 20px;
-            margin-top: 15px;
-            font-size: 16px;
-        }
-        
-        .streak-number {
-            font-size: 28px;
-            font-weight: bold;
-            color: #FFD700;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
-        }
-        
-        .tap-hint {
-            margin-top: 20px;
+        .task-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ff9a56;
+            border-radius: 15px;
             font-size: 14px;
-            background: rgba(255,255,255,0.25);
-            padding: 10px 20px;
-            border-radius: 25px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-        
-        /* 背面 */
-        .card-back {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            transform: rotateY(180deg);
-        }
-        
-        .success-icon {
-            font-size: 70px;
             margin-bottom: 10px;
-            animation: rotate 2s infinite;
         }
         
-        @keyframes rotate {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(10deg); }
+        .task-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
-        .card-back h2 {
-            font-size: 28px;
+        .chip {
+            background: #fff;
+            color: #e85d04;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 2px solid #ff9a56;
+            transition: all 0.3s;
+        }
+        
+        .chip:hover {
+            background: #ff9a56;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        /* 计时器 */
+        .timer-card {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border-radius: 25px;
+            padding: 20px;
             margin-bottom: 15px;
-            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+            border: 3px solid #4ecdc4;
+            text-align: center;
         }
         
-        .practice-box {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 30px;
-            border-radius: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .practice-time {
+        .timer-display {
             font-size: 48px;
             font-weight: bold;
+            color: #2d3436;
+            font-family: monospace;
+            margin-bottom: 15px;
         }
         
-        .practice-label {
-            font-size: 16px;
-            opacity: 0.9;
+        .timer-display.running {
+            animation: pulse 1s infinite;
+            color: #00b894;
         }
         
-        .points-earned {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #8B4513;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .timer-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
         
-        /* 按钮 */
-        .check-btn {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: #fff;
+        .btn {
+            padding: 12px 25px;
             border: none;
-            padding: 18px 60px;
-            font-size: 22px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
-            transition: all 0.3s ease;
-            display: none;
+            border-radius: 25px;
+            font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
             border: 3px solid #fff;
+            transition: transform 0.2s;
         }
         
-        .check-btn.show {
-            display: block;
-        }
-        
-        .check-btn:active {
+        .btn:active {
             transform: scale(0.95);
         }
         
-        /* 已打卡状态 */
-        .completed-badge {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        .btn-start {
+            background: linear-gradient(135deg, #00b894, #00cec9);
             color: #fff;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 20px;
-            font-weight: bold;
-            display: none;
-            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
-            animation: popIn 0.5s ease;
-            border: 3px solid #fff;
         }
         
-        .completed-badge.show {
-            display: block;
+        .btn-finish {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #fff;
         }
         
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            80% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        /* 徽章 */
+        .badges-card {
+            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #ff6b6b;
         }
         
-        /* 日历 */
-        .calendar {
-            background: rgba(255,255,255,0.95);
-            border-radius: 25px;
-            padding: 20px;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 3px solid #FFE4B5;
-        }
-        
-        .calendar h3 {
+        .badges-card h3 {
+            color: #ee5a6f;
             text-align: center;
             margin-bottom: 15px;
-            color: #FF6B6B;
-            font-size: 18px;
         }
         
-        .week-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            text-align: center;
+        .badges-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         
-        .week-day {
-            font-size: 13px;
-            color: #999;
-            padding: 5px;
-            font-weight: bold;
-        }
-        
-        .days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            margin-top: 10px;
-        }
-        
-        .day {
-            aspect-ratio: 1;
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
-            font-size: 14px;
-            color: #666;
-            background: #f5f5f5;
-            font-weight: bold;
+            font-size: 28px;
+            opacity: 0.3;
+            transition: all 0.5s;
+            border: 3px solid #ccc;
         }
         
-        .day.checked {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: #fff;
+        .badge.unlocked {
+            opacity: 1;
+            border-color: #ffd93d;
+            box-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+            animation: badgePop 0.6s ease;
         }
         
-        .day.today {
-            border: 3px solid #FF6B6B;
+        @keyframes badgePop {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
         
-        /* 奖励弹窗 */
-        .overlay {
+        /* 庆祝弹窗 */
+        .celebrate {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.8);
             display: none;
-            z-index: 999;
-        }
-        
-        .overlay.show {
-            display: block;
-        }
-        
-        .reward-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            padding: 35px;
-            border-radius: 30px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             z-index: 1000;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            border: 5px solid #fff;
-            max-width: 280px;
+            justify-content: center;
+            align-items: center;
         }
         
-        .reward-popup.show {
-            transform: translate(-50%, -50%) scale(1);
+        .celebrate.show {
+            display: flex;
         }
         
-        .reward-popup .emoji {
-            font-size: 70px;
-            margin-bottom: 15px;
-            animation: bounce 0.5s infinite;
+        .celebrate-content {
+            text-align: center;
+            color: #fff;
         }
         
-        .reward-popup h3 {
-            color: #8B4513;
-            margin-bottom: 10px;
-            font-size: 24px;
+        .celebrate-emoji {
+            font-size: 80px;
+            animation: dance 1s infinite;
         }
         
-        .reward-popup p {
-            color: #666;
-            font-size: 16px;
+        @keyframes dance {
+            0%, 100% { transform: rotate(-10deg) translateY(0); }
+            50% { transform: rotate(10deg) translateY(-20px); }
         }
         
-        .close-btn {
-            background: #fff;
-            color: #FFA500;
+        .celebrate h2 {
+            font-size: 28px;
+            color: #ffd93d;
+            margin: 20px 0;
+        }
+        
+        .celebrate button {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
             border: none;
-            padding: 12px 35px;
-            border-radius: 25px;
-            margin-top: 20px;
-            font-size: 16px;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
             font-weight: bold;
             cursor: pointer;
+            border: 3px solid #fff;
+        }
+        
+        /* 日历 */
+        .calendar-card {
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #9b59b6;
+        }
+        
+        .calendar-card h3 {
+            color: #9b59b6;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        
+        .cal-header {
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+            padding: 5px;
+        }
+        
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #e8e8e8;
+            color: #666;
+        }
+        
+        .cal-day.checked {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .cal-day.today {
+            border: 2px solid #9b59b6;
+        }
+        
+        /* 同步按钮 */
+        .sync-card {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #fff;
+            text-align: center;
+        }
+        
+        .sync-btn {
+            background: #fff;
+            color: #0984e3;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .sync-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 导出弹窗 */
+        .export-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .export-modal.show {
+            display: flex;
+        }
+        
+        .export-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        .export-content h3 {
+            color: #0984e3;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .export-textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #74b9ff;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 12px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        
+        .export-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .export-btns button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: #fff;
+        }
+        
+        .btn-close {
+            background: #e0e0e0;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <!-- 标题 -->
-    <div class="header">
-        <h1>🎹 练琴打卡</h1>
-        <p>坚持练习，成为小小钢琴家</p>
-    </div>
-    
-    <!-- 积分板 -->
-    <div class="score-board">
-        <span class="star">⭐</span>
-        <div class="score-info">
-            <span class="score-label">我的积分</span>
-            <span class="score-number" id="totalScore">0</span>
+    <div class="container">
+        <div class="header">
+            <h1>🌈 小小音乐家成长记</h1>
         </div>
-    </div>
-    
-    <!-- 翻转卡片 -->
-    <div class="card-container">
-        <div class="card" id="checkCard">
-            <!-- 正面 -->
-            <div class="card-face card-front">
-                <div class="piano-icon">🎹</div>
-                <h2>今天要练琴吗？</h2>
-                <p>每天练习30分钟</p>
-                <div class="streak-box">
-                    🔥 连续打卡 <span class="streak-number" id="streakDays">0</span> 天
-                </div>
-                <div class="tap-hint">👆 点我打卡</div>
+        
+        <div class="level-card">
+            <div class="level-info">
+                <span class="level-name" id="levelName">🎵 音乐小新手</span>
+                <span class="level-num" id="levelNum">Lv.1</span>
             </div>
-            
-            <!-- 背面 -->
-            <div class="card-face card-back">
-                <div class="success-icon">🎉</div>
-                <h2>太棒了！</h2>
-                <div class="practice-box">
-                    <div class="practice-time">30</div>
-                    <div class="practice-label">分钟</div>
-                </div>
-                <div class="points-earned">+10 积分</div>
+            <div class="exp-bar">
+                <div class="exp-fill" id="expFill" style="width: 0%"></div>
             </div>
         </div>
-    </div>
-    
-    <!-- 打卡按钮 -->
-    <button class="check-btn" id="checkBtn" onclick="checkIn()">
-        ✨ 确认打卡
-    </button>
-    
-    <!-- 已打卡徽章 -->
-    <div class="completed-badge" id="completedBadge">
-        ✅ 今日已完成
-    </div>
-    
-    <!-- 日历 -->
-    <div class="calendar">
-        <h3>📅 本月打卡日历</h3>
-        <div class="week-days">
-            <span class="week-day">日</span>
-            <span class="week-day">一</span>
-            <span class="week-day">二</span>
-            <span class="week-day">三</span>
-            <span class="week-day">四</span>
-            <span class="week-day">五</span>
-            <span class="week-day">六</span>
+        
+        <div class="task-card">
+            <h3>🎯 今天的练琴任务</h3>
+            <input type="text" class="task-input" id="taskInput" placeholder="想练什么？自己输入或点击下方">
+            <div class="task-chips">
+                <span class="chip" onclick="setTask('练习音阶')">🎹 音阶</span>
+                <span class="chip" onclick="setTask('练习曲子')">🎵 曲子</span>
+                <span class="chip" onclick="setTask('左手练习')">👋 左手</span>
+                <span class="chip" onclick="setTask('双手配合')">🙌 双手</span>
+            </div>
         </div>
-        <div class="days" id="calendarDays"></div>
+        
+        <div class="timer-card">
+            <div class="timer-display" id="timer">00:00</div>
+            <div class="timer-btns">
+                <button class="btn btn-start" id="startBtn" onclick="startTimer()">▶️ 开始</button>
+                <button class="btn btn-finish" onclick="finish()">✅ 完成</button>
+            </div>
+        </div>
+        
+        <div class="badges-card">
+            <h3>🏆 我的成就徽章</h3>
+            <div class="badges-grid">
+                <div class="badge" id="b1">🎵</div>
+                <div class="badge" id="b2">⏱️</div>
+                <div class="badge" id="b3">🌟</div>
+                <div class="badge" id="b4">🔥</div>
+                <div class="badge" id="b5">💎</div>
+            </div>
+        </div>
+        
+        <!-- 日历 -->
+        <div class="calendar-card">
+            <h3>📅 本月练习日历</h3>
+            <div class="calendar-grid" id="calendar">
+                <div class="cal-header">日</div>
+                <div class="cal-header">一</div>
+                <div class="cal-header">二</div>
+                <div class="cal-header">三</div>
+                <div class="cal-header">四</div>
+                <div class="cal-header">五</div>
+                <div class="cal-header">六</div>
+            </div>
+        </div>
+
+        <!-- 同步按钮 -->
+        <div class="sync-card">
+            <button class="sync-btn" onclick="showExport()">☁️ 同步到飞书</button>
+        </div>
     </div>
     
-    <!-- 奖励弹窗 -->
-    <div class="overlay" id="overlay" onclick="closeReward()"></div>
-    <div class="reward-popup" id="rewardPopup">
-        <div class="emoji" id="rewardEmoji">🎁</div>
-        <h3 id="rewardTitle">获得奖励！</h3>
-        <p id="rewardText">继续加油哦！</p>
-        <button class="close-btn" onclick="closeReward()">太棒了！</button>
+    <div class="celebrate" id="celebrate">
+        <div class="celebrate-content">
+            <div class="celebrate-emoji">🎉🎊🎉</div>
+            <h2 id="celebrateTitle">升级啦！</h2>
+            <p id="celebrateText">恭喜你升到2级！</p>
+            <button onclick="closeCelebrate()">继续加油 💪</button>
+        </div>
+    </div>
+    
+    <!-- 导出弹窗 -->
+    <div class="export-modal" id="exportModal">
+        <div class="export-content">
+            <h3>📋 复制到飞书表格</h3>
+            <textarea class="export-textarea" id="exportData" readonly></textarea>
+            <div class="export-btns">
+                <button class="btn-copy" onclick="copyData()">📋 复制</button>
+                <button class="btn-close" onclick="closeExport()">关闭</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // 数据存储
-        let score = parseInt(localStorage.getItem('pianoScore') || '0');
-        let streak = parseInt(localStorage.getItem('pianoStreak') || '0');
-        let lastCheckDate = localStorage.getItem('lastCheckDate');
-        let checkRecords = JSON.parse(localStorage.getItem('checkRecords') || '[]');
+        const levels = [
+            { level: 1, title: '🎵 音乐小新手', need: 50 },
+            { level: 2, title: '🎹 钢琴小达人', need: 100 },
+            { level: 3, title: '🌟 闪亮小明星', need: 200 },
+            { level: 4, title: '🎼 小小演奏家', need: 350 },
+            { level: 5, title: '💎 音乐宝石', need: 550 }
+        ];
         
-        // 初始化显示
-        document.getElementById('totalScore').textContent = score;
-        document.getElementById('streakDays').textContent = streak;
+        let level = parseInt(localStorage.getItem('level') || '1');
+        let exp = parseInt(localStorage.getItem('exp') || '0');
+        let seconds = 0;
+        let timer = null;
+        let unlocked = JSON.parse(localStorage.getItem('badges') || '[]');
         
-        // 检查今日是否已打卡
-        const today = new Date().toDateString();
-        const isCheckedToday = lastCheckDate === today;
+        updateDisplay();
+        unlocked.forEach(id => document.getElementById('b' + id)?.classList.add('unlocked'));
         
-        if (isCheckedToday) {
-            document.getElementById('checkCard').classList.add('flipped');
-            document.getElementById('completedBadge').classList.add('show');
+        function setTask(task) {
+            document.getElementById('taskInput').value = task;
         }
         
-        // 卡片翻转
-        const card = document.getElementById('checkCard');
-        const checkBtn = document.getElementById('checkBtn');
-        
-        card.addEventListener('click', function() {
-            if (!isCheckedToday && !this.classList.contains('flipped')) {
-                this.classList.add('flipped');
-                setTimeout(() => {
-                    checkBtn.classList.add('show');
-                }, 400);
-            }
-        });
-        
-        // 打卡功能
-        function checkIn() {
-            const today = new Date().toDateString();
-            
-            // 更新积分
-            score += 10;
-            
-            // 更新连续打卡
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            if (lastCheckDate === yesterday.toDateString()) {
-                streak += 1;
+        function startTimer() {
+            if (!timer) {
+                document.getElementById('timer').classList.add('running');
+                document.getElementById('startBtn').textContent = '⏸️ 暂停';
+                timer = setInterval(() => {
+                    seconds++;
+                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                    const s = (seconds % 60).toString().padStart(2, '0');
+                    document.getElementById('timer').textContent = m + ':' + s;
+                }, 1000);
             } else {
-                streak = 1;
+                clearInterval(timer);
+                timer = null;
+                document.getElementById('timer').classList.remove('running');
+                document.getElementById('startBtn').textContent = '▶️ 继续';
+            }
+        }
+        
+        function finish() {
+            if (seconds < 60) {
+                alert('再练一会儿吧，至少练1分钟哦！');
+                return;
             }
             
-            // 保存数据
-            localStorage.setItem('pianoScore', score);
-            localStorage.setItem('pianoStreak', streak);
-            localStorage.setItem('lastCheckDate', today);
+            clearInterval(timer);
+            timer = null;
             
-            const record = {
-                date: new Date().toISOString(),
-                score: 10,
-                duration: 30
-            };
-            checkRecords.push(record);
-            localStorage.setItem('checkRecords', JSON.stringify(checkRecords));
+            const mins = Math.floor(seconds / 60);
+            const gain = mins * 2;
+            exp += gain;
             
-            // 更新显示
-            document.getElementById('totalScore').textContent = score;
-            document.getElementById('streakDays').textContent = streak;
-            checkBtn.classList.remove('show');
-            document.getElementById('completedBadge').classList.add('show');
+            // 解锁徽章
+            if (mins >= 10) unlockBadge(2);
+            if (mins >= 30) unlockBadge(3);
+            if (!unlocked.includes(1)) unlockBadge(1);
             
-            // 显示奖励
-            showReward();
+            // 检查升级
+            while (level < levels.length && exp >= levels[level - 1].need) {
+                level++;
+                localStorage.setItem('level', level);
+                showCelebrate('升级啦！', '恭喜你升到 ' + level + ' 级！');
+            }
             
-            // 更新日历
+            localStorage.setItem('exp', exp);
+            localStorage.setItem('badges', JSON.stringify(unlocked));
+            
+            // 记录今天练习
+            recordPractice();
             renderCalendar();
+            
+            seconds = 0;
+            document.getElementById('timer').textContent = '00:00';
+            document.getElementById('timer').classList.remove('running');
+            document.getElementById('startBtn').textContent = '▶️ 开始';
+            
+            updateDisplay();
+            alert('🎉 太棒了！获得 ' + gain + ' 经验！');
         }
         
-        // 显示奖励
-        function showReward() {
-            const rewards = [
-                { emoji: '🎵', title: '音符小达人', text: '获得10积分！' },
-                { emoji: '🌟', title: '练琴小明星', text: '今天表现真棒！' },
-                { emoji: '🏆', title: '坚持小勇士', text: '继续保持哦！' },
-                { emoji: '🎹', title: '小小钢琴家', text: '进步看得见！' },
-                { emoji: '🌈', title: '音乐小天使', text: '琴声真美妙！' }
-            ];
-            
-            const reward = rewards[Math.floor(Math.random() * rewards.length)];
-            document.getElementById('rewardEmoji').textContent = reward.emoji;
-            document.getElementById('rewardTitle').textContent = reward.title;
-            document.getElementById('rewardText').textContent = reward.text;
-            
-            document.getElementById('overlay').classList.add('show');
-            document.getElementById('rewardPopup').classList.add('show');
+        function unlockBadge(id) {
+            if (!unlocked.includes(id)) {
+                unlocked.push(id);
+                document.getElementById('b' + id).classList.add('unlocked');
+            }
         }
         
-        // 关闭奖励
-        function closeReward() {
-            document.getElementById('overlay').classList.remove('show');
-            document.getElementById('rewardPopup').classList.remove('show');
+        function updateDisplay() {
+            const data = levels[level - 1];
+            document.getElementById('levelName').textContent = data.title;
+            document.getElementById('levelNum').textContent = 'Lv.' + level;
+            
+            const nextNeed = levels[level]?.need || data.need;
+            const progress = Math.min((exp / nextNeed) * 100, 100);
+            document.getElementById('expFill').style.width = progress + '%';
         }
+        
+        function showCelebrate(title, text) {
+            document.getElementById('celebrateTitle').textContent = title;
+            document.getElementById('celebrateText').textContent = text;
+            document.getElementById('celebrate').classList.add('show');
+        }
+        
+        function closeCelebrate() {
+            document.getElementById('celebrate').classList.remove('show');
+        }
+        
+        // 日历数据
+        let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords') || '[]');
         
         // 渲染日历
         function renderCalendar() {
-            const container = document.getElementById('calendarDays');
-            container.innerHTML = '';
-            
+            const calendar = document.getElementById('calendar');
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
             
+            // 获取月初是星期几
             const firstDay = new Date(year, month, 1).getDay();
+            // 获取当月天数
             const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // 保留星期标题，添加日期
+            let html = `
+                <div class="cal-header">日</div>
+                <div class="cal-header">一</div>
+                <div class="cal-header">二</div>
+                <div class="cal-header">三</div>
+                <div class="cal-header">四</div>
+                <div class="cal-header">五</div>
+                <div class="cal-header">六</div>
+            `;
             
             // 空白填充
             for (let i = 0; i < firstDay; i++) {
-                const empty = document.createElement('div');
-                container.appendChild(empty);
+                html += '<div></div>';
             }
             
             // 日期
             for (let day = 1; day <= daysInMonth; day++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'day';
-                dayEl.textContent = day;
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isChecked = practiceRecords.includes(dateStr);
+                const isToday = day === now.getDate();
                 
-                // 检查是否已打卡
-                const dateStr = new Date(year, month, day).toDateString();
-                const isChecked = checkRecords.some(r => 
-                    new Date(r.date).toDateString() === dateStr
-                );
+                let className = 'cal-day';
+                if (isChecked) className += ' checked';
+                if (isToday) className += ' today';
                 
-                if (isChecked) {
-                    dayEl.classList.add('checked');
-                    dayEl.textContent = '✓';
-                }
-                
-                // 标记今天
-                if (day === now.getDate()) {
-                    dayEl.classList.add('today');
-                }
-                
-                container.appendChild(dayEl);
+                html += `<div class="${className}">${isChecked ? '✓' : day}</div>`;
             }
+            
+            calendar.innerHTML = html;
+        }
+        
+        // 记录今天的练习
+        function recordPractice() {
+            const today = new Date().toISOString().split('T')[0];
+            if (!practiceRecords.includes(today)) {
+                practiceRecords.push(today);
+                localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+            }
+        }
+        
+        // 显示导出弹窗
+        function showExport() {
+            const today = new Date().toISOString().split('T')[0];
+            const data = `日期\t任务\t时长(分钟)\t获得经验\t等级
+${today}\t${document.getElementById('taskInput').value || '练琴'}\t${Math.floor(seconds / 60)}\t${Math.floor(seconds / 60) * 2}\tLv.${level}`;
+            
+            document.getElementById('exportData').value = data;
+            document.getElementById('exportModal').classList.add('show');
+        }
+        
+        // 复制数据
+        function copyData() {
+            const textarea = document.getElementById('exportData');
+            textarea.select();
+            document.execCommand('copy');
+            alert('📋 已复制！打开飞书表格粘贴即可');
+        }
+        
+        // 关闭导出
+        function closeExport() {
+            document.getElementById('exportModal').classList.remove('show');
         }
         
         // 初始化日历
