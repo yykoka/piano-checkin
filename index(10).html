@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐙 小小音乐家探险队</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #4facfe 0%, #00f2fe 30%, #0093E9 60%, #2C3E50 100%);
+            background-size: 400% 400%;
+            animation: oceanBg 15s ease infinite;
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        
+        @keyframes oceanBg {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 0% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        /* 海底气泡动画 */
+        .bubble {
+            position: fixed;
+            bottom: -50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: rise 8s infinite ease-in;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+        
+        /* 小鱼游动 - 从左向右 */
+        .fish-right {
+            position: fixed;
+            font-size: 40px;
+            animation: swimRight 15s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes swimRight {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100vw + 100px)); }
+        }
+        
+        /* 小鱼游动 - 从右向左（翻转） */
+        .fish-left {
+            position: fixed;
+            font-size: 40px;
+            animation: swimLeft 18s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes swimLeft {
+            0% { transform: translateX(calc(100vw + 100px)) scaleX(-1); }
+            100% { transform: translateX(-100px) scaleX(-1); }
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 标题动画 */
+        .header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 15px;
+            animation: titleBounce 2s ease infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes titleBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            background: linear-gradient(90deg, #fff, #a8edea, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+        
+        .header .subtitle {
+            font-size: 14px;
+            color: #a8edea;
+            margin-top: 5px;
+        }
+        
+        /* 探险队徽章 */
+        .badge-octonauts {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        /* 等级卡片 - 章鱼堡风格 */
+        .level-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(168,237,234,0.3));
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #00c9ff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 0 20px rgba(0,201,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .level-card::before {
+            content: '';
+        }
+        
+        .level-card .character-img {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+            animation: barnaclesWave 3s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes barnaclesWave {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-50%) rotate(5deg); }
+        }
+        
+        .level-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .level-name {
+            font-size: 18px;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        
+        .level-num {
+            background: linear-gradient(135deg, #00c9ff, #0093E9);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            animation: glow 2s infinite;
+            box-shadow: 0 0 10px rgba(0,201,255,0.5);
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #00c9ff; }
+            50% { box-shadow: 0 0 20px #00c9ff, 0 0 30px #0093E9; }
+        }
+        
+        .exp-bar {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+            height: 15px;
+            overflow: hidden;
+        }
+        
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00c9ff, #0093E9, #4facfe);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        /* 任务卡片 - 呱唧风格 */
+        .task-card {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #e17055;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .task-card::before {
+            content: '';
+        }
+        
+        .task-card .character-img {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: kwaziiBounce 2s infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes kwaziiBounce {
+            0%, 100% { transform: translateY(-50%) rotate(-10deg); }
+            50% { transform: translateY(-50%) rotate(10deg) scale(1.1); }
+        }
+        
+        .task-card h3 {
+            color: #d63031;
+            margin-bottom: 10px;
+            text-align: center;
+            padding-left: 80px;
+            font-size: 18px;
+        }
+        
+        .task-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e17055;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.9);
+        }
+        
+        .task-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-left: 80px;
+        }
+        
+        .chip {
+            background: #fff;
+            color: #e17055;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 2px solid #e17055;
+            transition: all 0.3s;
+        }
+        
+        .chip:hover {
+            background: #e17055;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        /* 计时器 - 皮医生风格 */
+        .timer-card {
+            background: linear-gradient(135deg, #a8e6cf, #88d8b0);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 15px;
+            border: 3px solid #00b894;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timer-card::before {
+            content: '';
+        }
+        
+        .timer-card .character-img {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            animation: pesoWaddle 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes pesoWaddle {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-50%) rotate(5deg) scale(1.05); }
+        }
+        
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2d3436;
+            font-family: monospace;
+            margin-bottom: 15px;
+            margin-right: 80px;
+        }
+        
+        .timer-display.running {
+            animation: pulse 1s infinite;
+            color: #00b894;
+        }
+        
+        .timer-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-right: 90px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 3px solid #fff;
+            transition: transform 0.2s;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: #fff;
+        }
+        
+        .btn-finish {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #fff;
+        }
+        
+        /* 徽章 - 巴克队长风格 */
+        .badges-card {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .badges-card::before {
+            content: '';
+        }
+        
+        .badges-card .character-img {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: barnaclesSalute 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes barnaclesSalute {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg) scale(1.1); }
+            75% { transform: rotate(15deg) scale(1.1); }
+        }
+        
+        .badges-card h3 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-left: 80px;
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .badges-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding-left: 80px;
+        }
+        
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            opacity: 0.5;
+            transition: all 0.5s;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+        
+        .badge.unlocked {
+            opacity: 1;
+            background: rgba(255,255,255,0.9);
+            border-color: #ffd93d;
+            box-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+            animation: badgePop 0.6s ease;
+        }
+        
+        @keyframes badgePop {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        /* 庆祝弹窗 */
+        .celebrate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .celebrate.show {
+            display: flex;
+        }
+        
+        .celebrate-content {
+            text-align: center;
+            color: #fff;
+        }
+        
+        .celebrate-emoji {
+            font-size: 80px;
+            animation: dance 1s infinite;
+        }
+        
+        @keyframes dance {
+            0%, 100% { transform: rotate(-10deg) translateY(0); }
+            50% { transform: rotate(10deg) translateY(-20px); }
+        }
+        
+        .celebrate h2 {
+            font-size: 28px;
+            color: #ffd93d;
+            margin: 20px 0;
+        }
+        
+        .celebrate button {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 3px solid #fff;
+        }
+        
+        /* 日历 - 海洋风格 */
+        .calendar-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(168,237,234,0.5));
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #00c9ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calendar-card::before {
+            content: '';
+        }
+        
+        .calendar-card .character-img {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: wave 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            50% { transform: translateY(-50%) rotate(10deg) scale(1.1); }
+        }
+        
+        .calendar-card h3 {
+            color: #0066cc;
+            text-align: center;
+            margin-bottom: 10px;
+            padding-right: 80px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            padding-right: 80px;
+        }
+        
+        .cal-header {
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+            padding: 5px;
+        }
+        
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #e8e8e8;
+            color: #666;
+        }
+        
+        .cal-day.checked {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .cal-day.today {
+            border: 2px solid #9b59b6;
+        }
+        
+        /* 同步按钮 - 谢灵通风格 */
+        .sync-card {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sync-card::before {
+            content: '';
+        }
+        
+        .sync-card .character-img {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: shellingtonWave 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes shellingtonWave {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            25% { transform: translateY(-50%) rotate(-15deg) scale(1.1); }
+            75% { transform: translateY(-50%) rotate(15deg) scale(1.1); }
+        }
+        
+        .sync-btn {
+            background: #fff;
+            color: #e84393;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            width: calc(100% - 90px);
+            margin-left: 90px;
+        }
+        
+        .sync-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 导出弹窗 */
+        .export-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .export-modal.show {
+            display: flex;
+        }
+        
+        .export-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        .export-content h3 {
+            color: #0984e3;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .export-textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #74b9ff;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 12px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        
+        .export-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .export-btns button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: #fff;
+        }
+        
+        .btn-close {
+            background: #e0e0e0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐙 小小音乐家探险队</h1>
+            <div class="subtitle">🌊 和海底小纵队一起探索音乐世界！</div>
+        </div>
+        
+        <div class="level-card">
+            <img src="barnacles.png" alt="巴克队长" class="character-img" onerror="this.style.display='none'">
+            <div class="level-info">
+                <span class="level-name" id="levelName">🎵 音乐小新手</span>
+                <span class="level-num" id="levelNum">Lv.1</span>
+            </div>
+            <div class="exp-bar">
+                <div class="exp-fill" id="expFill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div class="task-card">
+            <img src="kwazii.png" alt="呱唧" class="character-img" onerror="this.style.display='none'">
+            <h3>🎯 今天的练琴任务</h3>
+            <input type="text" class="task-input" id="taskInput" placeholder="想练什么？自己输入或点击下方">
+            <div class="task-chips">
+                <span class="chip" onclick="setTask('练习音阶')">🐙 音阶探险</span>
+                <span class="chip" onclick="setTask('练习曲子')">🎵 海洋乐章</span>
+                <span class="chip" onclick="setTask('左手练习')">🦈 左鳍训练</span>
+                <span class="chip" onclick="setTask('双手配合')">🐬 双鳍配合</span>
+            </div>
+        </div>
+        
+        <div class="timer-card">
+            <img src="peso.png" alt="皮医生" class="character-img" onerror="this.style.display='none'">
+            <div class="timer-display" id="timer">00:00</div>
+            <div class="timer-btns">
+                <button class="btn btn-start" id="startBtn" onclick="startTimer()">▶️ 开始</button>
+                <button class="btn btn-finish" onclick="finish()">✅ 完成</button>
+            </div>
+        </div>
+        
+        <div class="badges-card">
+            <img src="barnacles2.png" alt="巴克队长" class="character-img" onerror="this.style.display='none'">
+            <h3>🏆 我的探险勋章</h3>
+            <div class="badges-grid">
+                <div class="badge" id="b1">⚓</div>
+                <div class="badge" id="b2">🐚</div>
+                <div class="badge" id="b3">⭐</div>
+                <div class="badge" id="b4">🔱</div>
+                <div class="badge" id="b5">👑</div>
+            </div>
+        </div>
+        
+        <!-- 日历 -->
+        <div class="calendar-card">
+            <img src="wave.png" alt="海浪" class="character-img" onerror="this.style.display='none'">
+            <h3>📅 本月练习日历</h3>
+            <div class="calendar-grid" id="calendar">
+                <div class="cal-header">日</div>
+                <div class="cal-header">一</div>
+                <div class="cal-header">二</div>
+                <div class="cal-header">三</div>
+                <div class="cal-header">四</div>
+                <div class="cal-header">五</div>
+                <div class="cal-header">六</div>
+            </div>
+        </div>
+
+        <!-- 同步按钮 -->
+        <div class="sync-card">
+            <img src="shellington.png" alt="谢灵通" class="character-img" onerror="this.style.display='none'">
+            <button class="sync-btn" onclick="showExport()">☁️ 同步到飞书</button>
+        </div>
+    </div>
+    
+    <div class="celebrate" id="celebrate">
+        <div class="celebrate-content">
+            <div class="celebrate-emoji">🐙🌊🐠</div>
+            <h2 id="celebrateTitle">探险升级！</h2>
+            <p id="celebrateText">恭喜你成为虎鲨艇驾驶员！</p>
+            <button onclick="closeCelebrate()">继续探险 🐙</button>
+        </div>
+    </div>
+    
+    <!-- 导出弹窗 -->
+    <div class="export-modal" id="exportModal">
+        <div class="export-content">
+            <h3>📋 复制到飞书表格</h3>
+            <textarea class="export-textarea" id="exportData" readonly></textarea>
+            <div class="export-btns">
+                <button class="btn-copy" onclick="copyData()">📋 复制</button>
+                <button class="btn-close" onclick="closeExport()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const levels = [
+            { level: 1, title: '🐙 探险队新兵', need: 50 },
+            { level: 2, title: '🦈 虎鲨艇驾驶员', need: 100 },
+            { level: 3, title: '🐧 企鹅艇专家', need: 200 },
+            { level: 4, title: '🐱 海盗猫伙伴', need: 350 },
+            { level: 5, title: '🐻 巴克队长副手', need: 550 }
+        ];
+        
+        let level = parseInt(localStorage.getItem('level') || '1');
+        let exp = parseInt(localStorage.getItem('exp') || '0');
+        let seconds = 0;
+        let timer = null;
+        let unlocked = JSON.parse(localStorage.getItem('badges') || '[]');
+        
+        updateDisplay();
+        unlocked.forEach(id => document.getElementById('b' + id)?.classList.add('unlocked'));
+        
+        // 创建海底气泡动画
+        function createBubbles() {
+            const bubbleCount = 15;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 20 + 10;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDelay = Math.random() * 8 + 's';
+                bubble.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                document.body.appendChild(bubble);
+            }
+        }
+        
+        // 创建小鱼游动 - 左右两个方向
+        function createFish() {
+            const fishTypes = ['🐠', '🐟', '🐡', '🦈', '🐬', '🐳', '🐋'];
+            
+            // 从左向右游的鱼
+            for (let i = 0; i < 4; i++) {
+                const fish = document.createElement('div');
+                fish.className = 'fish-right';
+                fish.textContent = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                fish.style.top = Math.random() * 70 + 15 + '%';
+                fish.style.animationDelay = Math.random() * 10 + 's';
+                fish.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                document.body.appendChild(fish);
+            }
+            
+            // 从右向左游的鱼
+            for (let i = 0; i < 4; i++) {
+                const fish = document.createElement('div');
+                fish.className = 'fish-left';
+                fish.textContent = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                fish.style.top = Math.random() * 70 + 15 + '%';
+                fish.style.animationDelay = Math.random() * 10 + 's';
+                fish.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                document.body.appendChild(fish);
+            }
+        }
+        
+        createBubbles();
+        createFish();
+        
+        function setTask(task) {
+            document.getElementById('taskInput').value = task;
+        }
+        
+        function startTimer() {
+            if (!timer) {
+                document.getElementById('timer').classList.add('running');
+                document.getElementById('startBtn').textContent = '⏸️ 暂停';
+                timer = setInterval(() => {
+                    seconds++;
+                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                    const s = (seconds % 60).toString().padStart(2, '0');
+                    document.getElementById('timer').textContent = m + ':' + s;
+                }, 1000);
+            } else {
+                clearInterval(timer);
+                timer = null;
+                document.getElementById('timer').classList.remove('running');
+                document.getElementById('startBtn').textContent = '▶️ 继续';
+            }
+        }
+        
+        function finish() {
+            if (seconds < 60) {
+                alert('再练一会儿吧，至少练1分钟哦！');
+                return;
+            }
+            
+            clearInterval(timer);
+            timer = null;
+            
+            const mins = Math.floor(seconds / 60);
+            const gain = mins * 2;
+            exp += gain;
+            
+            // 解锁徽章
+            if (mins >= 10) unlockBadge(2);
+            if (mins >= 30) unlockBadge(3);
+            if (!unlocked.includes(1)) unlockBadge(1);
+            
+            // 检查升级
+            while (level < levels.length && exp >= levels[level - 1].need) {
+                level++;
+                localStorage.setItem('level', level);
+                const newTitle = levels[level - 1]?.title || '🐻 巴克队长副手';
+                showCelebrate('探险升级！', '恭喜你成为 ' + newTitle.split(' ')[1] + '！');
+            }
+            
+            localStorage.setItem('exp', exp);
+            localStorage.setItem('badges', JSON.stringify(unlocked));
+            
+            // 记录今天练习
+            recordPractice();
+            renderCalendar();
+            
+            seconds = 0;
+            document.getElementById('timer').textContent = '00:00';
+            document.getElementById('timer').classList.remove('running');
+            document.getElementById('startBtn').textContent = '▶️ 开始';
+            
+            updateDisplay();
+            alert('🐙 太棒了！获得 ' + gain + ' 探险积分！');
+        }
+        
+        function unlockBadge(id) {
+            if (!unlocked.includes(id)) {
+                unlocked.push(id);
+                document.getElementById('b' + id).classList.add('unlocked');
+            }
+        }
+        
+        function updateDisplay() {
+            const data = levels[level - 1];
+            document.getElementById('levelName').textContent = data.title;
+            document.getElementById('levelNum').textContent = 'Lv.' + level;
+            
+            const nextNeed = levels[level]?.need || data.need;
+            const progress = Math.min((exp / nextNeed) * 100, 100);
+            document.getElementById('expFill').style.width = progress + '%';
+        }
+        
+        function showCelebrate(title, text) {
+            document.getElementById('celebrateTitle').textContent = title;
+            document.getElementById('celebrateText').textContent = text;
+            document.getElementById('celebrate').classList.add('show');
+        }
+        
+        function closeCelebrate() {
+            document.getElementById('celebrate').classList.remove('show');
+        }
+        
+        // 日历数据
+        let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords') || '[]');
+        
+        // 渲染日历
+        function renderCalendar() {
+            const calendar = document.getElementById('calendar');
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            // 获取月初是星期几
+            const firstDay = new Date(year, month, 1).getDay();
+            // 获取当月天数
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // 保留星期标题，添加日期
+            let html = `
+                <div class="cal-header">日</div>
+                <div class="cal-header">一</div>
+                <div class="cal-header">二</div>
+                <div class="cal-header">三</div>
+                <div class="cal-header">四</div>
+                <div class="cal-header">五</div>
+                <div class="cal-header">六</div>
+            `;
+            
+            // 空白填充
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div></div>';
+            }
+            
+            // 日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isChecked = practiceRecords.includes(dateStr);
+                const isToday = day === now.getDate();
+                
+                let className = 'cal-day';
+                if (isChecked) className += ' checked';
+                if (isToday) className += ' today';
+                
+                html += `<div class="${className}">${isChecked ? '✓' : day}</div>`;
+            }
+            
+            calendar.innerHTML = html;
+        }
+        
+        // 记录今天的练习
+        function recordPractice() {
+            const today = new Date().toISOString().split('T')[0];
+            if (!practiceRecords.includes(today)) {
+                practiceRecords.push(today);
+                localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+            }
+        }
+        
+        // 显示导出弹窗
+        function showExport() {
+            const today = new Date().toISOString().split('T')[0];
+            const data = `日期\t任务\t时长(分钟)\t获得经验\t等级
+${today}\t${document.getElementById('taskInput').value || '练琴'}\t${Math.floor(seconds / 60)}\t${Math.floor(seconds / 60) * 2}\tLv.${level}`;
+            
+            document.getElementById('exportData').value = data;
+            document.getElementById('exportModal').classList.add('show');
+        }
+        
+        // 复制数据
+        function copyData() {
+            const textarea = document.getElementById('exportData');
+            textarea.select();
+            document.execCommand('copy');
+            alert('📋 已复制！打开飞书表格粘贴即可');
+        }
+        
+        // 关闭导出
+        function closeExport() {
+            document.getElementById('exportModal').classList.remove('show');
+        }
+        
+        // 初始化日历
+        renderCalendar();
+    </script>
+</body>
+</html>
