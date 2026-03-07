@@ -3,29 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌈 小小音乐家成长记</title>
+    <title>🐙 小小音乐家探险队</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #ffd93d 100%);
+            background: linear-gradient(180deg, #4facfe 0%, #00f2fe 30%, #0093E9 60%, #2C3E50 100%);
             background-size: 400% 400%;
-            animation: rainbowBg 15s ease infinite;
+            animation: oceanBg 15s ease infinite;
             min-height: 100vh;
             padding: 10px;
             overflow-x: hidden;
         }
         
-        @keyframes rainbowBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes oceanBg {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 0% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        /* 海底气泡动画 */
+        .bubble {
+            position: fixed;
+            bottom: -50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: rise 8s infinite ease-in;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+        
+        /* 小鱼游动 - 从左向右 */
+        .fish-right {
+            position: fixed;
+            font-size: 40px;
+            animation: swimRight 15s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes swimRight {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100vw + 100px)); }
+        }
+        
+        /* 小鱼游动 - 从右向左（翻转） */
+        .fish-left {
+            position: fixed;
+            font-size: 40px;
+            animation: swimLeft 18s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes swimLeft {
+            0% { transform: translateX(calc(100vw + 100px)) scaleX(-1); }
+            100% { transform: translateX(-100px) scaleX(-1); }
         }
         
         .container {
             max-width: 400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
         
         /* 标题动画 */
@@ -34,6 +82,7 @@
             color: #fff;
             margin-bottom: 15px;
             animation: titleBounce 2s ease infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         @keyframes titleBounce {
@@ -42,33 +91,75 @@
         }
         
         .header h1 {
-            font-size: 24px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            background: linear-gradient(90deg, #fff, #ffd93d, #fff);
+            font-size: 22px;
+            background: linear-gradient(90deg, #fff, #a8edea, #fff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: none;
         }
         
-        /* 等级卡片 */
+        .header .subtitle {
+            font-size: 14px;
+            color: #a8edea;
+            margin-top: 5px;
+        }
+        
+        /* 探险队徽章 */
+        .badge-octonauts {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        /* 等级卡片 - 章鱼堡风格 */
         .level-card {
-            background: linear-gradient(135deg, #fff, #f8f9fa);
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(168,237,234,0.3));
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 15px;
-            border: 3px solid #ffd93d;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 3px solid #00c9ff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 0 20px rgba(0,201,255,0.2);
             position: relative;
             overflow: hidden;
         }
         
         .level-card::before {
             content: '';
+        }
+        
+        .level-card .character-img {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+            animation: barnaclesWave 3s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes barnaclesWave {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-50%) rotate(5deg); }
+        }
+        
+        .level-card::after {
+            content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shine 3s infinite;
         }
         
@@ -87,26 +178,27 @@
         
         .level-name {
             font-size: 18px;
-            color: #764ba2;
+            color: #0066cc;
             font-weight: bold;
         }
         
         .level-num {
-            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            background: linear-gradient(135deg, #00c9ff, #0093E9);
             color: #fff;
             padding: 5px 15px;
             border-radius: 15px;
             font-weight: bold;
             animation: glow 2s infinite;
+            box-shadow: 0 0 10px rgba(0,201,255,0.5);
         }
         
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px #ffd93d; }
-            50% { box-shadow: 0 0 20px #ffd93d; }
+            0%, 100% { box-shadow: 0 0 5px #00c9ff; }
+            50% { box-shadow: 0 0 20px #00c9ff, 0 0 30px #0093E9; }
         }
         
         .exp-bar {
-            background: #e0e0e0;
+            background: rgba(0,0,0,0.1);
             border-radius: 10px;
             height: 15px;
             overflow: hidden;
@@ -114,66 +206,118 @@
         
         .exp-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background: linear-gradient(90deg, #00c9ff, #0093E9, #4facfe);
             border-radius: 10px;
             transition: width 0.5s;
         }
         
-        /* 任务卡片 */
+        /* 任务卡片 - 呱唧风格 */
         .task-card {
-            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 15px;
-            border: 3px solid #ff9a56;
+            border: 3px solid #e17055;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .task-card::before {
+            content: '';
+        }
+        
+        .task-card .character-img {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: kwaziiBounce 2s infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes kwaziiBounce {
+            0%, 100% { transform: translateY(-50%) rotate(-10deg); }
+            50% { transform: translateY(-50%) rotate(10deg) scale(1.1); }
         }
         
         .task-card h3 {
-            color: #e85d04;
+            color: #d63031;
             margin-bottom: 10px;
             text-align: center;
+            padding-left: 80px;
+            font-size: 18px;
         }
         
         .task-input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ff9a56;
+            border: 2px solid #e17055;
             border-radius: 15px;
             font-size: 14px;
             margin-bottom: 10px;
+            background: rgba(255,255,255,0.9);
         }
         
         .task-chips {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            padding-left: 80px;
         }
         
         .chip {
             background: #fff;
-            color: #e85d04;
+            color: #e17055;
             padding: 6px 12px;
             border-radius: 15px;
             font-size: 12px;
             cursor: pointer;
-            border: 2px solid #ff9a56;
+            border: 2px solid #e17055;
             transition: all 0.3s;
         }
         
         .chip:hover {
-            background: #ff9a56;
+            background: #e17055;
             color: #fff;
             transform: scale(1.1);
         }
         
-        /* 计时器 */
+        /* 计时器 - 皮医生风格 */
         .timer-card {
-            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            background: linear-gradient(135deg, #a8e6cf, #88d8b0);
             border-radius: 25px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 15px;
-            border: 3px solid #4ecdc4;
+            border: 3px solid #00b894;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timer-card::before {
+            content: '';
+        }
+        
+        .timer-card .character-img {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            animation: pesoWaddle 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes pesoWaddle {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-50%) rotate(5deg) scale(1.05); }
         }
         
         .timer-display {
@@ -182,6 +326,7 @@
             color: #2d3436;
             font-family: monospace;
             margin-bottom: 15px;
+            margin-right: 80px;
         }
         
         .timer-display.running {
@@ -193,6 +338,7 @@
             display: flex;
             gap: 10px;
             justify-content: center;
+            margin-right: 90px;
         }
         
         .btn {
@@ -220,19 +366,46 @@
             color: #fff;
         }
         
-        /* 徽章 */
+        /* 徽章 - 巴克队长风格 */
         .badges-card {
-            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 15px;
-            border: 3px solid #ff6b6b;
+            border: 3px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .badges-card::before {
+            content: '';
+        }
+        
+        .badges-card .character-img {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: barnaclesSalute 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes barnaclesSalute {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg) scale(1.1); }
+            75% { transform: rotate(15deg) scale(1.1); }
         }
         
         .badges-card h3 {
-            color: #ee5a6f;
+            color: #fff;
             text-align: center;
             margin-bottom: 15px;
+            padding-left: 80px;
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
         .badges-grid {
@@ -240,24 +413,26 @@
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
+            padding-left: 80px;
         }
         
         .badge {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: #e0e0e0;
+            background: rgba(255,255,255,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            opacity: 0.3;
+            opacity: 0.5;
             transition: all 0.5s;
-            border: 3px solid #ccc;
+            border: 3px solid rgba(255,255,255,0.5);
         }
         
         .badge.unlocked {
             opacity: 1;
+            background: rgba(255,255,255,0.9);
             border-color: #ffd93d;
             box-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
             animation: badgePop 0.6s ease;
@@ -320,19 +495,44 @@
             border: 3px solid #fff;
         }
         
-        /* 日历 */
+        /* 日历 - 海洋风格 */
         .calendar-card {
-            background: linear-gradient(135deg, #fff, #f0f0f0);
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(168,237,234,0.5));
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 15px;
-            border: 3px solid #9b59b6;
+            border: 3px solid #00c9ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calendar-card::before {
+            content: '';
+        }
+        
+        .calendar-card .character-img {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: wave 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            50% { transform: translateY(-50%) rotate(10deg) scale(1.1); }
         }
         
         .calendar-card h3 {
-            color: #9b59b6;
+            color: #0066cc;
             text-align: center;
             margin-bottom: 10px;
+            padding-right: 80px;
         }
         
         .calendar-grid {
@@ -340,6 +540,7 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 5px;
             text-align: center;
+            padding-right: 80px;
         }
         
         .cal-header {
@@ -370,26 +571,52 @@
             border: 2px solid #9b59b6;
         }
         
-        /* 同步按钮 */
+        /* 同步按钮 - 谢灵通风格 */
         .sync-card {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            background: linear-gradient(135deg, #fd79a8, #e84393);
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 15px;
             border: 3px solid #fff;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sync-card::before {
+            content: '';
+        }
+        
+        .sync-card .character-img {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            animation: shellingtonWave 2s ease-in-out infinite;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes shellingtonWave {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            25% { transform: translateY(-50%) rotate(-15deg) scale(1.1); }
+            75% { transform: translateY(-50%) rotate(15deg) scale(1.1); }
         }
         
         .sync-btn {
             background: #fff;
-            color: #0984e3;
+            color: #e84393;
             border: none;
-            padding: 12px 30px;
+            padding: 15px 30px;
             font-size: 16px;
             border-radius: 25px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            width: calc(100% - 90px);
+            margin-left: 90px;
         }
         
         .sync-btn:active {
@@ -467,10 +694,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌈 小小音乐家成长记</h1>
+            <h1>🐙 小小音乐家探险队</h1>
+            <div class="subtitle">🌊 和海底小纵队一起探索音乐世界！</div>
         </div>
         
         <div class="level-card">
+            <img src="barnacles.png" alt="巴克队长" class="character-img" onerror="this.style.display='none'">
             <div class="level-info">
                 <span class="level-name" id="levelName">🎵 音乐小新手</span>
                 <span class="level-num" id="levelNum">Lv.1</span>
@@ -481,17 +710,19 @@
         </div>
         
         <div class="task-card">
+            <img src="kwazii.png" alt="呱唧" class="character-img" onerror="this.style.display='none'">
             <h3>🎯 今天的练琴任务</h3>
             <input type="text" class="task-input" id="taskInput" placeholder="想练什么？自己输入或点击下方">
             <div class="task-chips">
-                <span class="chip" onclick="setTask('练习音阶')">🎹 音阶</span>
-                <span class="chip" onclick="setTask('练习曲子')">🎵 曲子</span>
-                <span class="chip" onclick="setTask('左手练习')">👋 左手</span>
-                <span class="chip" onclick="setTask('双手配合')">🙌 双手</span>
+                <span class="chip" onclick="setTask('练习音阶')">🐙 音阶探险</span>
+                <span class="chip" onclick="setTask('练习曲子')">🎵 海洋乐章</span>
+                <span class="chip" onclick="setTask('左手练习')">🦈 左鳍训练</span>
+                <span class="chip" onclick="setTask('双手配合')">🐬 双鳍配合</span>
             </div>
         </div>
         
         <div class="timer-card">
+            <img src="peso.png" alt="皮医生" class="character-img" onerror="this.style.display='none'">
             <div class="timer-display" id="timer">00:00</div>
             <div class="timer-btns">
                 <button class="btn btn-start" id="startBtn" onclick="startTimer()">▶️ 开始</button>
@@ -500,18 +731,20 @@
         </div>
         
         <div class="badges-card">
-            <h3>🏆 我的成就徽章</h3>
+            <img src="barnacles2.png" alt="巴克队长" class="character-img" onerror="this.style.display='none'">
+            <h3>🏆 我的探险勋章</h3>
             <div class="badges-grid">
-                <div class="badge" id="b1">🎵</div>
-                <div class="badge" id="b2">⏱️</div>
-                <div class="badge" id="b3">🌟</div>
-                <div class="badge" id="b4">🔥</div>
-                <div class="badge" id="b5">💎</div>
+                <div class="badge" id="b1">⚓</div>
+                <div class="badge" id="b2">🐚</div>
+                <div class="badge" id="b3">⭐</div>
+                <div class="badge" id="b4">🔱</div>
+                <div class="badge" id="b5">👑</div>
             </div>
         </div>
         
         <!-- 日历 -->
         <div class="calendar-card">
+            <img src="wave.png" alt="海浪" class="character-img" onerror="this.style.display='none'">
             <h3>📅 本月练习日历</h3>
             <div class="calendar-grid" id="calendar">
                 <div class="cal-header">日</div>
@@ -526,16 +759,17 @@
 
         <!-- 同步按钮 -->
         <div class="sync-card">
+            <img src="shellington.png" alt="谢灵通" class="character-img" onerror="this.style.display='none'">
             <button class="sync-btn" onclick="showExport()">☁️ 同步到飞书</button>
         </div>
     </div>
     
     <div class="celebrate" id="celebrate">
         <div class="celebrate-content">
-            <div class="celebrate-emoji">🎉🎊🎉</div>
-            <h2 id="celebrateTitle">升级啦！</h2>
-            <p id="celebrateText">恭喜你升到2级！</p>
-            <button onclick="closeCelebrate()">继续加油 💪</button>
+            <div class="celebrate-emoji">🐙🌊🐠</div>
+            <h2 id="celebrateTitle">探险升级！</h2>
+            <p id="celebrateText">恭喜你成为虎鲨艇驾驶员！</p>
+            <button onclick="closeCelebrate()">继续探险 🐙</button>
         </div>
     </div>
     
@@ -553,11 +787,11 @@
 
     <script>
         const levels = [
-            { level: 1, title: '🎵 音乐小新手', need: 50 },
-            { level: 2, title: '🎹 钢琴小达人', need: 100 },
-            { level: 3, title: '🌟 闪亮小明星', need: 200 },
-            { level: 4, title: '🎼 小小演奏家', need: 350 },
-            { level: 5, title: '💎 音乐宝石', need: 550 }
+            { level: 1, title: '🐙 探险队新兵', need: 50 },
+            { level: 2, title: '🦈 虎鲨艇驾驶员', need: 100 },
+            { level: 3, title: '🐧 企鹅艇专家', need: 200 },
+            { level: 4, title: '🐱 海盗猫伙伴', need: 350 },
+            { level: 5, title: '🐻 巴克队长副手', need: 550 }
         ];
         
         let level = parseInt(localStorage.getItem('level') || '1');
@@ -568,6 +802,52 @@
         
         updateDisplay();
         unlocked.forEach(id => document.getElementById('b' + id)?.classList.add('unlocked'));
+        
+        // 创建海底气泡动画
+        function createBubbles() {
+            const bubbleCount = 15;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 20 + 10;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDelay = Math.random() * 8 + 's';
+                bubble.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                document.body.appendChild(bubble);
+            }
+        }
+        
+        // 创建小鱼游动 - 左右两个方向
+        function createFish() {
+            const fishTypes = ['🐠', '🐟', '🐡', '🦈', '🐬', '🐳', '🐋'];
+            
+            // 从左向右游的鱼
+            for (let i = 0; i < 4; i++) {
+                const fish = document.createElement('div');
+                fish.className = 'fish-right';
+                fish.textContent = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                fish.style.top = Math.random() * 70 + 15 + '%';
+                fish.style.animationDelay = Math.random() * 10 + 's';
+                fish.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                document.body.appendChild(fish);
+            }
+            
+            // 从右向左游的鱼
+            for (let i = 0; i < 4; i++) {
+                const fish = document.createElement('div');
+                fish.className = 'fish-left';
+                fish.textContent = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                fish.style.top = Math.random() * 70 + 15 + '%';
+                fish.style.animationDelay = Math.random() * 10 + 's';
+                fish.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                document.body.appendChild(fish);
+            }
+        }
+        
+        createBubbles();
+        createFish();
         
         function setTask(task) {
             document.getElementById('taskInput').value = task;
@@ -613,7 +893,8 @@
             while (level < levels.length && exp >= levels[level - 1].need) {
                 level++;
                 localStorage.setItem('level', level);
-                showCelebrate('升级啦！', '恭喜你升到 ' + level + ' 级！');
+                const newTitle = levels[level - 1]?.title || '🐻 巴克队长副手';
+                showCelebrate('探险升级！', '恭喜你成为 ' + newTitle.split(' ')[1] + '！');
             }
             
             localStorage.setItem('exp', exp);
@@ -629,7 +910,7 @@
             document.getElementById('startBtn').textContent = '▶️ 开始';
             
             updateDisplay();
-            alert('🎉 太棒了！获得 ' + gain + ' 经验！');
+            alert('🐙 太棒了！获得 ' + gain + ' 探险积分！');
         }
         
         function unlockBadge(id) {
