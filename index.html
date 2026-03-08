@@ -120,81 +120,7 @@
         
         /* 等级卡片 - 章鱼堡风格 */
         .level-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(168,237,234,0.3));
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 3px solid #00c9ff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 0 20px rgba(0,201,255,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .level-card::before {
-            content: '';
-        }
-        
-        .level-card .character-img {
-            position: absolute;
-            top: 50%;
-            right: 5px;
-            transform: translateY(-50%);
-            width: 85px;
-            height: 85px;
-            object-fit: contain;
-            animation: barnaclesWave 3s ease-in-out infinite;
-            z-index: 2;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-        }
-        
-        @keyframes barnaclesWave {
-            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
-            50% { transform: translateY(-50%) rotate(5deg); }
-        }
-        
-        .level-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-        
-        .level-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            position: relative;
-        }
-        
-        .level-name {
-            font-size: 18px;
-            color: #0066cc;
-            font-weight: bold;
-        }
-        
-        .level-num {
-            background: linear-gradient(135deg, #00c9ff, #0093E9);
-            color: #fff;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-weight: bold;
-            animation: glow 2s infinite;
-            box-shadow: 0 0 10px rgba(0,201,255,0.5);
-        }
-        
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px #00c9ff; }
-            50% { box-shadow: 0 0 20px #00c9ff, 0 0 30px #0093E9; }
+            display: none;
         }
         
         .exp-bar {
@@ -213,13 +139,249 @@
         
         /* 任务卡片 - 呱唧风格 */
         .task-card {
+            display: none;
+        }
+
+        /* 积分和等级卡片 */
+        .score-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(168,237,234,0.5));
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #00c9ff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #0066cc;
+        }
+
+        .daily-score, .total-score {
+            background: rgba(0,201,255,0.1);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .daily-score span, .total-score span {
+            color: #e17055;
+            font-size: 18px;
+        }
+
+        .level-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .level-display span:first-child {
+            font-size: 18px;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .level-progress {
+            background: linear-gradient(135deg, #00c9ff, #0093E9);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        /* 奖励进度卡片 */
+        .rewards-card {
             background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 15px;
             border: 3px solid #e17055;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .rewards-card h3 {
+            color: #d63031;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .rewards-track {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .reward-item {
+            text-align: center;
+            opacity: 0.4;
+            transition: all 0.3s;
+        }
+
+        .reward-item.unlocked {
+            opacity: 1;
+            animation: rewardPop 0.6s ease;
+        }
+
+        @keyframes rewardPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .reward-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .reward-item.unlocked .reward-icon {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .reward-name {
+            font-size: 12px;
+            color: #d63031;
+            font-weight: bold;
+        }
+
+        .reward-score {
+            font-size: 10px;
+            color: #e17055;
+        }
+
+        /* 时间选择卡片 */
+        .timer-select-card {
+            background: linear-gradient(135deg, #a8e6cf, #88d8b0);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid #00b894;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .timer-select-card h3 {
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .time-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .time-btn {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: #fff;
+            border: none;
+            padding: 15px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #fff;
+            transition: all 0.3s;
+            line-height: 1.4;
+        }
+
+        .time-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,184,148,0.4);
+        }
+
+        .time-btn:active {
+            transform: scale(0.95);
+        }
+
+        .time-btn:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .time-hint {
+            text-align: center;
+            color: #2d3436;
+            font-size: 12px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* 日历提示 */
+        .calendar-hint {
+            text-align: center;
+            color: #0066cc;
+            font-size: 12px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* 积分增加动画 */
+        @keyframes scorePop {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.5); color: #ffd93d; }
+            60% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        
+        .score-animate {
+            animation: scorePop 0.6s ease;
+        }
+        
+        /* 积分飘浮动画 */
+        @keyframes floatUp {
+            0% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateY(-50px) scale(1.5); 
+            }
+        }
+        
+        .score-float {
+            position: fixed;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd93d;
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatUp 1s ease forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #e8e8e8;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cal-day:hover {
+            background: #d0d0d0;
+            transform: scale(1.1);
+        }
+
+        .cal-day.checked {
+            background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .cal-day.today {
+            border: 3px solid #9b59b6;
         }
         
         .task-card::before {
@@ -368,80 +530,7 @@
         
         /* 徽章 - 巴克队长风格 */
         .badges-card {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 3px solid #fff;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .badges-card::before {
-            content: '';
-        }
-        
-        .badges-card .character-img {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 75px;
-            height: 75px;
-            object-fit: contain;
-            animation: barnaclesSalute 2s ease-in-out infinite;
-            z-index: 2;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-        }
-        
-        @keyframes barnaclesSalute {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-15deg) scale(1.1); }
-            75% { transform: rotate(15deg) scale(1.1); }
-        }
-        
-        .badges-card h3 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 15px;
-            padding-left: 80px;
-            font-size: 18px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        
-        .badges-grid {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            padding-left: 80px;
-        }
-        
-        .badge {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            opacity: 0.5;
-            transition: all 0.5s;
-            border: 3px solid rgba(255,255,255,0.5);
-        }
-        
-        .badge.unlocked {
-            opacity: 1;
-            background: rgba(255,255,255,0.9);
-            border-color: #ffd93d;
-            box-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
-            animation: badgePop 0.6s ease;
-        }
-        
-        @keyframes badgePop {
-            0% { transform: scale(0) rotate(-180deg); }
-            50% { transform: scale(1.3) rotate(10deg); }
-            100% { transform: scale(1) rotate(0deg); }
+            display: none;
         }
         
         /* 庆祝弹窗 */
@@ -698,54 +787,81 @@
             <div class="subtitle">🌊 和海底小纵队一起探索音乐世界！</div>
         </div>
         
-        <div class="level-card">
-            <img src="barnacles.png" alt="巴克队长" class="character-img" onerror="this.style.display='none'">
-            <div class="level-info">
-                <span class="level-name" id="levelName">🎵 音乐小新手</span>
-                <span class="level-num" id="levelNum">Lv.1</span>
+        <!-- 积分和等级卡片 -->
+        <div class="score-card">
+            <div class="score-header">
+                <div class="daily-score">今日积分: <span id="dailyScore">0</span>/10</div>
+                <div class="total-score">累计积分: <span id="totalScore">0</span></div>
+            </div>
+            <div class="level-display">
+                <span id="currentLevel">🌱 音乐小苗</span>
+                <span class="level-progress">Lv.<span id="levelNum">1</span></span>
             </div>
             <div class="exp-bar">
                 <div class="exp-fill" id="expFill" style="width: 0%"></div>
             </div>
         </div>
-        
-        <div class="task-card">
-            <img src="kwazii.png" alt="呱唧" class="character-img" onerror="this.style.display='none'">
-            <h3>🎯 今天的练琴任务</h3>
-            <input type="text" class="task-input" id="taskInput" placeholder="想练什么？自己输入或点击下方">
-            <div class="task-chips">
-                <span class="chip" onclick="setTask('练习音阶')">🐙 音阶探险</span>
-                <span class="chip" onclick="setTask('练习曲子')">🎵 海洋乐章</span>
-                <span class="chip" onclick="setTask('左手练习')">🦈 左鳍训练</span>
-                <span class="chip" onclick="setTask('双手配合')">🐬 双鳍配合</span>
+
+        <!-- 我的奖励 -->
+        <div class="rewards-card">
+            <h3>🏆 我的奖励</h3>
+            <div class="rewards-track">
+                <div class="reward-item" data-score="0">
+                    <div class="reward-icon" id="reward0">🌱</div>
+                    <div class="reward-name">小芽</div>
+                    <div class="reward-score">0分</div>
+                </div>
+                <div class="reward-item" data-score="30">
+                    <div class="reward-icon" id="reward30">🌿</div>
+                    <div class="reward-name">嫩苗</div>
+                    <div class="reward-score">30分</div>
+                </div>
+                <div class="reward-item" data-score="60">
+                    <div class="reward-icon" id="reward60">🌸</div>
+                    <div class="reward-name">红花</div>
+                    <div class="reward-score">60分</div>
+                </div>
+                <div class="reward-item" data-score="100">
+                    <div class="reward-icon" id="reward100">🏆</div>
+                    <div class="reward-name">奖杯</div>
+                    <div class="reward-score">100分</div>
+                </div>
+                <div class="reward-item" data-score="200">
+                    <div class="reward-icon" id="reward200">👑</div>
+                    <div class="reward-name">皇冠</div>
+                    <div class="reward-score">200分</div>
+                </div>
+                <div class="reward-item" data-score="500">
+                    <div class="reward-icon" id="reward500">💎</div>
+                    <div class="reward-name">钻石</div>
+                    <div class="reward-score">500分</div>
+                </div>
+                <div class="reward-item" data-score="1000">
+                    <div class="reward-icon" id="reward1000">🌟</div>
+                    <div class="reward-name">明星</div>
+                    <div class="reward-score">1000分</div>
+                </div>
             </div>
         </div>
         
-        <div class="timer-card">
-            <img src="peso.png" alt="皮医生" class="character-img" onerror="this.style.display='none'">
-            <div class="timer-display" id="timer">00:00</div>
-            <div class="timer-btns">
-                <button class="btn btn-start" id="startBtn" onclick="startTimer()">▶️ 开始</button>
-                <button class="btn btn-finish" onclick="finish()">✅ 完成</button>
+        <!-- 时间选择 -->
+        <div class="timer-select-card">
+            <h3>⏱️ 练习时长</h3>
+            <div class="time-buttons">
+                <button class="time-btn" onclick="addPractice(5)">5分钟<br>+5分</button>
+                <button class="time-btn" onclick="addPractice(10)">10分钟<br>+10分</button>
+                <button class="time-btn" onclick="addPractice(15)">15分钟<br>+10分</button>
+                <button class="time-btn" onclick="addPractice(20)">20分钟<br>+10分</button>
+                <button class="time-btn" onclick="addPractice(25)">25分钟<br>+10分</button>
+                <button class="time-btn" onclick="addPractice(30)">30分钟<br>+10分</button>
             </div>
-        </div>
-        
-        <div class="badges-card">
-            <img src="barnacles2.png" alt="巴克队长" class="character-img" onerror="this.style.display='none'">
-            <h3>🏆 我的探险勋章</h3>
-            <div class="badges-grid">
-                <div class="badge" id="b1">⚓</div>
-                <div class="badge" id="b2">🐚</div>
-                <div class="badge" id="b3">⭐</div>
-                <div class="badge" id="b4">🔱</div>
-                <div class="badge" id="b5">👑</div>
-            </div>
+            <p class="time-hint">每天最多获得10积分，超出部分不累计</p>
         </div>
         
         <!-- 日历 -->
         <div class="calendar-card">
-            <img src="wave.png" alt="海浪" class="character-img" onerror="this.style.display='none'">
-            <h3>📅 本月练习日历</h3>
+            <h3>📅 练习日历</h3>
+            <p class="calendar-hint">点击日期可补打卡或取消打卡</p>
             <div class="calendar-grid" id="calendar">
                 <div class="cal-header">日</div>
                 <div class="cal-header">一</div>
@@ -786,22 +902,37 @@
     </div>
 
     <script>
-        const levels = [
-            { level: 1, title: '🐙 探险队新兵', need: 50 },
-            { level: 2, title: '🦈 虎鲨艇驾驶员', need: 100 },
-            { level: 3, title: '🐧 企鹅艇专家', need: 200 },
-            { level: 4, title: '🐱 海盗猫伙伴', need: 350 },
-            { level: 5, title: '🐻 巴克队长副手', need: 550 }
+        // 奖励配置（也是等级）
+        const rewards = [
+            { score: 0, icon: '🌱', name: '小芽', title: '音乐小芽' },
+            { score: 30, icon: '🌿', name: '嫩苗', title: '音乐嫩苗' },
+            { score: 60, icon: '🌸', name: '红花', title: '音乐红花' },
+            { score: 100, icon: '🏆', name: '奖杯', title: '音乐奖杯' },
+            { score: 200, icon: '👑', name: '皇冠', title: '音乐皇冠' },
+            { score: 500, icon: '💎', name: '钻石', title: '音乐钻石' },
+            { score: 1000, icon: '🌟', name: '明星', title: '音乐明星' }
         ];
         
-        let level = parseInt(localStorage.getItem('level') || '1');
-        let exp = parseInt(localStorage.getItem('exp') || '0');
-        let seconds = 0;
-        let timer = null;
-        let unlocked = JSON.parse(localStorage.getItem('badges') || '[]');
+        let totalScore = parseInt(localStorage.getItem('totalScore') || '0');
+        let dailyScore = parseInt(localStorage.getItem('dailyScore') || '0');
+        let lastPracticeDate = localStorage.getItem('lastPracticeDate') || '';
+        let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords') || '[]');
         
+        // 检查是否新的一天，重置每日积分
+        function checkNewDay() {
+            const today = new Date().toISOString().split('T')[0];
+            if (lastPracticeDate !== today) {
+                dailyScore = 0;
+                localStorage.setItem('dailyScore', '0');
+                lastPracticeDate = today;
+                localStorage.setItem('lastPracticeDate', today);
+            }
+        }
+        
+        checkNewDay();
         updateDisplay();
-        unlocked.forEach(id => document.getElementById('b' + id)?.classList.add('unlocked'));
+        renderCalendar();
+        updateRewards();
         
         // 创建海底气泡动画
         function createBubbles() {
@@ -819,11 +950,10 @@
             }
         }
         
-        // 创建小鱼游动 - 左右两个方向
+        // 创建小鱼游动
         function createFish() {
             const fishTypes = ['🐠', '🐟', '🐡', '🦈', '🐬', '🐳', '🐋'];
             
-            // 从左向右游的鱼
             for (let i = 0; i < 4; i++) {
                 const fish = document.createElement('div');
                 fish.className = 'fish-right';
@@ -834,7 +964,6 @@
                 document.body.appendChild(fish);
             }
             
-            // 从右向左游的鱼
             for (let i = 0; i < 4; i++) {
                 const fish = document.createElement('div');
                 fish.className = 'fish-left';
@@ -849,99 +978,135 @@
         createBubbles();
         createFish();
         
-        function setTask(task) {
-            document.getElementById('taskInput').value = task;
-        }
-        
-        function startTimer() {
-            if (!timer) {
-                document.getElementById('timer').classList.add('running');
-                document.getElementById('startBtn').textContent = '⏸️ 暂停';
-                timer = setInterval(() => {
-                    seconds++;
-                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-                    const s = (seconds % 60).toString().padStart(2, '0');
-                    document.getElementById('timer').textContent = m + ':' + s;
-                }, 1000);
-            } else {
-                clearInterval(timer);
-                timer = null;
-                document.getElementById('timer').classList.remove('running');
-                document.getElementById('startBtn').textContent = '▶️ 继续';
-            }
-        }
-        
-        function finish() {
-            if (seconds < 60) {
-                alert('再练一会儿吧，至少练1分钟哦！');
+        // 添加练习记录
+        function addPractice(minutes) {
+            checkNewDay();
+            
+            // 每天最多10积分
+            let points = Math.min(minutes, 10 - dailyScore);
+            if (points <= 0) {
+                alert('今天已获得满额10积分，明天再来吧！');
                 return;
             }
             
-            clearInterval(timer);
-            timer = null;
+            // 获取按钮位置，用于飘浮动画
+            const btn = event.target;
+            const rect = btn.getBoundingClientRect();
+            showFloatScore(rect.left + rect.width/2, rect.top, `+${points}`);
             
-            const mins = Math.floor(seconds / 60);
-            const gain = mins * 2;
-            exp += gain;
-            
-            // 解锁徽章
-            if (mins >= 10) unlockBadge(2);
-            if (mins >= 30) unlockBadge(3);
-            if (!unlocked.includes(1)) unlockBadge(1);
-            
-            // 检查升级
-            while (level < levels.length && exp >= levels[level - 1].need) {
-                level++;
-                localStorage.setItem('level', level);
-                const newTitle = levels[level - 1]?.title || '🐻 巴克队长副手';
-                showCelebrate('探险升级！', '恭喜你成为 ' + newTitle.split(' ')[1] + '！');
-            }
-            
-            localStorage.setItem('exp', exp);
-            localStorage.setItem('badges', JSON.stringify(unlocked));
+            dailyScore += points;
+            totalScore += points;
             
             // 记录今天练习
-            recordPractice();
-            renderCalendar();
+            const today = new Date().toISOString().split('T')[0];
+            if (!practiceRecords.includes(today)) {
+                practiceRecords.push(today);
+                localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+            }
             
-            seconds = 0;
-            document.getElementById('timer').textContent = '00:00';
-            document.getElementById('timer').classList.remove('running');
-            document.getElementById('startBtn').textContent = '▶️ 开始';
+            localStorage.setItem('dailyScore', dailyScore);
+            localStorage.setItem('totalScore', totalScore);
+            localStorage.setItem('lastPracticeDate', today);
             
             updateDisplay();
-            alert('🐙 太棒了！获得 ' + gain + ' 探险积分！');
+            renderCalendar();
+            updateRewards();
+            
+            // 积分数字动画
+            animateScore();
+            
+            // 检查是否获得新奖励
+            checkNewReward();
+            
+            setTimeout(() => {
+                alert(`🎉 练习${minutes}分钟！获得${points}积分！\n今日积分：${dailyScore}/10\n累计积分：${totalScore}`);
+            }, 300);
         }
         
-        function unlockBadge(id) {
-            if (!unlocked.includes(id)) {
-                unlocked.push(id);
-                document.getElementById('b' + id).classList.add('unlocked');
+        // 显示飘浮积分
+        function showFloatScore(x, y, text) {
+            const floatEl = document.createElement('div');
+            floatEl.className = 'score-float';
+            floatEl.textContent = text;
+            floatEl.style.left = x + 'px';
+            floatEl.style.top = y + 'px';
+            document.body.appendChild(floatEl);
+            
+            setTimeout(() => {
+                floatEl.remove();
+            }, 1000);
+        }
+        
+        // 积分数字动画
+        function animateScore() {
+            const dailyEl = document.getElementById('dailyScore');
+            const totalEl = document.getElementById('totalScore');
+            
+            dailyEl.classList.add('score-animate');
+            totalEl.classList.add('score-animate');
+            
+            setTimeout(() => {
+                dailyEl.classList.remove('score-animate');
+                totalEl.classList.remove('score-animate');
+            }, 600);
+        }
+        
+        // 检查是否获得新奖励
+        function checkNewReward() {
+            let currentReward = rewards[0];
+            for (let i = rewards.length - 1; i >= 0; i--) {
+                if (totalScore >= rewards[i].score) {
+                    currentReward = rewards[i];
+                    break;
+                }
+            }
+            
+            const savedReward = localStorage.getItem('currentReward') || '';
+            if (currentReward.name !== savedReward) {
+                localStorage.setItem('currentReward', currentReward.name);
+                showCelebrate('获得新奖励！', `恭喜获得 ${currentReward.icon} ${currentReward.name}！`);
             }
         }
         
+        // 更新奖励显示
+        function updateRewards() {
+            rewards.forEach((reward, index) => {
+                const el = document.getElementById(`reward${reward.score}`);
+                const item = el?.parentElement;
+                if (item) {
+                    if (totalScore >= reward.score) {
+                        item.classList.add('unlocked');
+                    } else {
+                        item.classList.remove('unlocked');
+                    }
+                }
+            });
+        }
+        
+        // 更新显示
         function updateDisplay() {
-            const data = levels[level - 1];
-            document.getElementById('levelName').textContent = data.title;
-            document.getElementById('levelNum').textContent = 'Lv.' + level;
+            document.getElementById('dailyScore').textContent = dailyScore;
+            document.getElementById('totalScore').textContent = totalScore;
             
-            const nextNeed = levels[level]?.need || data.need;
-            const progress = Math.min((exp / nextNeed) * 100, 100);
+            // 计算当前奖励等级
+            let currentReward = rewards[0];
+            let nextReward = rewards[1];
+            for (let i = rewards.length - 1; i >= 0; i--) {
+                if (totalScore >= rewards[i].score) {
+                    currentReward = rewards[i];
+                    nextReward = rewards[i + 1] || rewards[i];
+                    break;
+                }
+            }
+            
+            document.getElementById('currentLevel').textContent = currentReward.icon + ' ' + currentReward.title;
+            
+            // 计算进度到下一个奖励
+            const needForNext = nextReward.score - currentReward.score;
+            const progressInLevel = totalScore - currentReward.score;
+            const progress = needForNext > 0 ? Math.min((progressInLevel / needForNext) * 100, 100) : 100;
             document.getElementById('expFill').style.width = progress + '%';
         }
-        
-        function showCelebrate(title, text) {
-            document.getElementById('celebrateTitle').textContent = title;
-            document.getElementById('celebrateText').textContent = text;
-            document.getElementById('celebrate').classList.add('show');
-        }
-        
-        function closeCelebrate() {
-            document.getElementById('celebrate').classList.remove('show');
-        }
-        
-        // 日历数据
-        let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords') || '[]');
         
         // 渲染日历
         function renderCalendar() {
@@ -981,26 +1146,44 @@
                 if (isChecked) className += ' checked';
                 if (isToday) className += ' today';
                 
-                html += `<div class="${className}">${isChecked ? '✓' : day}</div>`;
+                html += `<div class="${className}" onclick="toggleDate('${dateStr}')">${isChecked ? '✓' : day}</div>`;
             }
             
             calendar.innerHTML = html;
         }
         
-        // 记录今天的练习
-        function recordPractice() {
-            const today = new Date().toISOString().split('T')[0];
-            if (!practiceRecords.includes(today)) {
-                practiceRecords.push(today);
-                localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+        // 切换日期打卡状态（可补打卡或取消）
+        function toggleDate(dateStr) {
+            if (practiceRecords.includes(dateStr)) {
+                // 取消打卡
+                if (confirm('确定要取消这天的打卡记录吗？')) {
+                    practiceRecords = practiceRecords.filter(d => d !== dateStr);
+                    // 同时扣除积分（如果是今天）
+                    const today = new Date().toISOString().split('T')[0];
+                    if (dateStr === today && dailyScore > 0) {
+                        dailyScore = 0;
+                        totalScore = Math.max(0, totalScore - dailyScore);
+                        localStorage.setItem('dailyScore', '0');
+                        localStorage.setItem('totalScore', totalScore);
+                    }
+                }
+            } else {
+                // 补打卡
+                practiceRecords.push(dateStr);
+                alert('补打卡成功！');
             }
+            localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+            renderCalendar();
+            updateDisplay();
+            updateRewards();
         }
         
         // 显示导出弹窗
         function showExport() {
             const today = new Date().toISOString().split('T')[0];
-            const data = `日期\t任务\t时长(分钟)\t获得经验\t等级
-${today}\t${document.getElementById('taskInput').value || '练琴'}\t${Math.floor(seconds / 60)}\t${Math.floor(seconds / 60) * 2}\tLv.${level}`;
+            const currentLevel = document.getElementById('levelNum').textContent;
+            const data = `日期\t累计积分\t等级\t打卡天数\t今日积分
+${today}\t${totalScore}\tLv.${currentLevel}\t${practiceRecords.length}\t${dailyScore}/10`;
             
             document.getElementById('exportData').value = data;
             document.getElementById('exportModal').classList.add('show');
@@ -1011,7 +1194,7 @@ ${today}\t${document.getElementById('taskInput').value || '练琴'}\t${Math.floo
             const textarea = document.getElementById('exportData');
             textarea.select();
             document.execCommand('copy');
-            alert('📋 已复制！打开飞书表格粘贴即可');
+            alert('📋 已复制！');
         }
         
         // 关闭导出
